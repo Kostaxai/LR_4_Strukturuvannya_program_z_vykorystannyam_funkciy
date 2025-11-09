@@ -1,0 +1,147 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// =================== ОГОЛОШЕННЯ ФУНКЦІЙ ===================
+
+// --- Proc17: Обчислення площі та периметру трикутника ---
+void TriangleALS(double a, double b, double angle, double &S, double &P); 
+void taskProc17(); // процедура-завдання 1
+
+// --- Integer37: Розрахунок кількості плиток та залишку ---
+void taskInteger37(); 
+
+// --- Integer35: три функції ---
+bool inputHours(int &hours);        // (1) введення
+void calculateDaysHours(int hours, int &days, int &remainingHours); // (2) підрахунок
+void outputResult(int days, int remainingHours); // (3) виведення
+void taskInteger35(); // процедура-завдання 3
+
+// --- Меню ---
+void menu();
+
+// =================== MAIN ===================
+int main() {
+    menu();
+    return 0;
+}
+
+// =================== ВИЗНАЧЕННЯ ФУНКЦІЙ ===================
+
+// --- Меню з вибором задачі ---
+void menu() {
+    int choice;
+    cout << "Оберіть задачу:\n";
+    cout << "1 - Proc17 (трикутник)\n";
+    cout << "2 - Integer37 (плитки)\n";
+    cout << "3 - Integer35 (години у доби)\n";
+    cout << "Ваш вибір: ";
+    cin >> choice;
+
+    switch (choice) {
+        case 1:
+            taskProc17();
+            break;
+        case 2:
+            taskInteger37();
+            break;
+        case 3:
+            taskInteger35();
+            break;
+        default:
+            cout << "Некоректний вибір!\n";
+            break;
+    }
+}
+
+// ========== PROC17 (TriangleALS) ==========
+
+// --- Функція TriangleALS ---
+// Призначення: обчислює площу (S) та периметр (P) трикутника
+// за двома сторонами a, b та кутом між ними (у радіанах).
+void TriangleALS(double a, double b, double angle, double &S, double &P) {
+    S = 0.5 * a * b * sin(angle);
+    P = a + b + sqrt(a*a + b*b - 2*a*b*cos(angle));
+}
+
+// --- Процедура taskProc17 ---
+// Призначення: введення даних, перевірка коректності, виклик функції TriangleALS.
+void taskProc17() {
+    double a, b, angle, S, P;
+    cout << "Введіть сторони a, b і кут (у радіанах): ";
+    cin >> a >> b >> angle;
+
+    // --- Перевірка на коректність введених значень ---
+    if (a <= 0 || b <= 0) {
+        cout << "Помилка! Сторони повинні бути додатними числами.\n";
+        return;
+    }
+    if (angle <= 0 || angle >= M_PI) {
+        cout << "Помилка! Кут повинен бути в межах (0; π) радіан.\n";
+        return;
+    }
+
+    // --- Виклик функції обчислення ---
+    TriangleALS(a, b, angle, S, P);
+
+    cout << "Площа = " << S << ", Периметр = " << P << endl;
+}
+
+// ========== INTEGER37 ==========
+
+// --- Процедура taskInteger37 ---
+// Призначення: визначає, скільки квадратних плиток зі стороною C
+// можна розмістити в прямокутнику A×B, і яка площа залишиться незаповненою.
+void taskInteger37() {
+    double A, B, C;
+    cout << "Введіть довжину, ширину і сторону плитки: ";
+    cin >> A >> B >> C;
+
+    if (A <= 0 || B <= 0 || C <= 0) {
+        cout << "Некоректні вхідні дані! Значення мають бути > 0.\n";
+        return;
+    }
+
+    int tiles = static_cast<int>(A / C) * static_cast<int>(B / C);
+    double unused = A * B - tiles * C * C;
+
+    cout << "Кількість плиток: " << tiles << endl;
+    cout << "Незаповнена площа: " << unused << endl;
+}
+
+// ========== INTEGER35 ==========
+
+// --- Функція inputHours ---
+// Призначення: введення кількості годин з перевіркою на коректність.
+bool inputHours(int &hours) {
+    cout << "Введіть кількість годин: ";
+    cin >> hours;
+    if (hours < 0) {
+        cout << "Некоректне значення! Години не можуть бути від’ємними.\n";
+        return false;
+    }
+    return true;
+}
+
+// --- Функція calculateDaysHours ---
+// Призначення: обчислює кількість діб і залишок годин.
+void calculateDaysHours(int hours, int &days, int &remainingHours) {
+    days = hours / 24;
+    remainingHours = hours % 24;
+}
+
+// --- Функція outputResult ---
+// Призначення: виводить результат у консоль.
+void outputResult(int days, int remainingHours) {
+    cout << "Діб: " << days << ", Залишок годин: " << remainingHours << endl;
+}
+
+// --- Процедура taskInteger35 ---
+// Призначення: організовує введення, обчислення і виведення результатів.
+void taskInteger35() {
+    int hours;
+    if (!inputHours(hours)) return;
+    int days, remainingHours;
+    calculateDaysHours(hours, days, remainingHours);
+    outputResult(days, remainingHours);
+}
