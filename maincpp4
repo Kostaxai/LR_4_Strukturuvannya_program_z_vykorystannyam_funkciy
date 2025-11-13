@@ -1,0 +1,133 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// =================== ОГОЛОШЕННЯ ФУНКЦІЙ ===================
+
+// --- Proc17: трикутник ---
+void TriangleALS(double a, double b, double angle, double &S, double &P); 
+void taskProc17();
+
+// --- Proc37: прямокутник ---
+double RectP(double x1, double y1, double x2, double y2);
+void taskProc37();
+
+// --- Integer35: години → доби ---
+bool inputHours(int &hours);
+void calculateDaysHours(int hours, int &days, int &remainingHours);
+void outputResult(int days, int remainingHours);
+void taskInteger35();
+
+// --- Меню ---
+void menu();
+
+// =================== MAIN ===================
+int main() {
+    menu();
+    return 0;
+}
+
+// =================== ВИЗНАЧЕННЯ ФУНКЦІЙ ===================
+
+// --- Меню ---
+void menu() {
+    int choice;
+    cout << "Оберіть задачу:\n";
+    cout << "1 - Proc17 (трикутник)\n";
+    cout << "2 - Proc37 (прямокутник)\n";
+    cout << "3 - Integer35 (години у доби)\n";
+    cout << "Ваш вибір: ";
+    cin >> choice;
+
+    switch (choice) {
+        case 1: taskProc17(); break;
+        case 2: taskProc37(); break;
+        case 3: taskInteger35(); break;
+        default: cout << "Некоректний вибір!\n"; break;
+    }
+}
+
+// ========== PROC17 (TriangleALS) ==========
+
+// Обчислення площі та периметра трикутника за сторонами a, b та кутом між ними (у радіанах)
+void TriangleALS(double a, double b, double angle, double &S, double &P) {
+    S = 0.5 * a * b * sin(angle);
+    P = a + b + sqrt(a*a + b*b - 2*a*b*cos(angle));
+}
+
+void taskProc17() {
+    double a, b, angle, S, P;
+    cout << "Введіть сторони a, b і кут (у радіанах): ";
+    cin >> a >> b >> angle;
+
+    // Перевірка на коректність
+    if (a <= 0 || b <= 0) {
+        cout << "Помилка! Сторони повинні бути додатними числами.\n";
+        return;
+    }
+    if (angle <= 0 || angle >= M_PI) {
+        cout << "Помилка! Кут повинен бути в межах (0; π) радіан.\n";
+        return;
+    }
+
+    TriangleALS(a, b, angle, S, P);
+    cout << "Площа = " << S << ", Периметр = " << P << endl;
+}
+
+// ========== PROC37 (RectP) ==========
+
+// Функція RectP: обчислює периметр прямокутника за координатами протилежних вершин
+double RectP(double x1, double y1, double x2, double y2) {
+    double width = fabs(x2 - x1);
+    double height = fabs(y2 - y1);
+    return 2 * (width + height);
+}
+
+void taskProc37() {
+    double x1, y1, x2, y2;
+    cout << "Введіть координати протилежних вершин прямокутника (x1, y1, x2, y2): ";
+    cin >> x1 >> y1 >> x2 >> y2;
+
+    // Перевірка на коректність введення: діапазон [-100, 100]
+    if (x1 < -100 || x1 > 100 || x2 < -100 || x2 > 100 ||
+        y1 < -100 || y1 > 100 || y2 < -100 || y2 > 100) {
+        cout << "Помилка! Усі координати повинні бути в межах [-100; 100].\n";
+        return;
+    }
+
+    double P = RectP(x1, y1, x2, y2);
+    cout << "Периметр прямокутника = " << P << endl;
+}
+
+// ========== INTEGER35 ==========
+
+// Введення годин
+bool inputHours(int &hours) {
+    cout << "Введіть кількість годин: ";
+    cin >> hours;
+    if (hours < 0) {
+        cout << "Некоректне значення! Години не можуть бути від’ємними.\n";
+        return false;
+    }
+    return true;
+}
+
+// Обчислення діб і залишку годин
+void calculateDaysHours(int hours, int &days, int &remainingHours) {
+    days = hours / 24;
+    remainingHours = hours % 24;
+}
+
+// Виведення результату
+void outputResult(int days, int remainingHours) {
+    cout << "Діб: " << days << ", Залишок годин: " << remainingHours << endl;
+}
+
+// Основна процедура для Integer35
+void taskInteger35() {
+    int hours;
+    if (!inputHours(hours)) return;
+    int days, remainingHours;
+    calculateDaysHours(hours, days, remainingHours);
+    outputResult(days, remainingHours);
+}
