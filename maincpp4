@@ -1,0 +1,214 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <cmath>
+using namespace std;
+
+/* ----------------------------------------------------------
+                ПРОТОТИПИ ФУНКЦІЙ
+---------------------------------------------------------- */
+
+// Функція для введення додатного числа (Proc17)
+double InputPositiveDouble(string prompt);
+
+// Функція для введення кута в радіанах (Proc17)
+double InputAngle(string prompt);
+
+// Функція для введення координати прямокутника (Proc37)
+double InputRectCoord(string prompt);
+
+// Функція обчислення площі і периметра трикутника (Proc17)
+void TriangleALS(double a, double b, double angle, double &S, double &P);
+
+// Процедура виконання завдання Proc17
+void Task_Proc17();
+
+// Функція обчислення периметра прямокутника (Proc37)
+double RectP(double x1, double y1, double x2, double y2);
+
+// Процедура виконання завдання Proc37
+void Task_Proc37();
+
+// Функції для завдання Integer35
+bool InputHours(int &hours);
+void CalcDaysHours(int hours, int &days, int &rem);
+void OutputResult(int days, int rem);
+void Task_Integer35();
+
+/* ----------------------------------------------------------
+                        MAIN
+---------------------------------------------------------- */
+int main() {
+    int choice;
+    cout << "Оберіть завдання:" << endl;
+    cout << "1 — Proc17 (трикутники)" << endl;
+    cout << "2 — Proc37 (прямокутники)" << endl;
+    cout << "3 — Integer35 (години → дні)" << endl;
+    cout << "Введіть номер: ";
+    cin >> choice;
+
+    switch (choice) {
+        case 1: Task_Proc17(); break;
+        case 2: Task_Proc37(); break;
+        case 3: Task_Integer35(); break;
+        default: cout << "Неправильний вибір!" << endl;
+    }
+
+    return 0;
+}
+
+/* ----------------------------------------------------------
+                ВИЗНАЧЕННЯ ФУНКЦІЙ
+---------------------------------------------------------- */
+
+// ------------------- Proc17 -----------------------------
+
+double InputPositiveDouble(string prompt) {
+    string line;
+    cout << prompt;
+    cin >> line;
+
+    for (size_t i = 0; i < line.size(); i++)
+        if (line[i] == ',') line[i] = '.';
+
+    stringstream ss(line);
+    double val;
+    if (!(ss >> val) || val <= 0 || val > 100) {
+        cout << "Помилка! Значення має бути >0 і <=100. Спробуйте ще раз." << endl;
+        return InputPositiveDouble(prompt);
+    }
+    return val;
+}
+
+double InputAngle(string prompt) {
+    string line;
+    cout << prompt;
+    cin >> line;
+
+    for (size_t i = 0; i < line.size(); i++)
+        if (line[i] == ',') line[i] = '.';
+
+    stringstream ss(line);
+    double val;
+    if (!(ss >> val) || val <= 0 || val >= M_PI) {
+        cout << "Помилка! Кут має бути від 0 до π. Спробуйте ще раз." << endl;
+        return InputAngle(prompt);
+    }
+    return val;
+}
+
+void TriangleALS(double a, double b, double angle, double &S, double &P) 
+{
+    S = 0.5 * a * b * sin(angle);
+    P = a + b + sqrt(a*a + b*b - 2*a*b*cos(angle));
+}
+
+void Task_Proc17() 
+{
+    double a1 = InputPositiveDouble("\nТрикутник 1\nВведіть сторону a: ");
+    double b1 = InputPositiveDouble("Введіть сторону b: ");
+    double ang1 = InputAngle("Введіть кут між сторонами (в радіанах): ");
+    double S1, P1;
+    TriangleALS(a1, b1, ang1, S1, P1);
+
+    double a2 = InputPositiveDouble("\nТрикутник 2\nВведіть сторону a: ");
+    double b2 = InputPositiveDouble("Введіть сторону b: ");
+    double ang2 = InputAngle("Введіть кут між сторонами (в радіанах): ");
+    double S2, P2;
+    TriangleALS(a2, b2, ang2, S2, P2);
+
+    double a3 = InputPositiveDouble("\nТрикутник 3\nВведіть сторону a: ");
+    double b3 = InputPositiveDouble("Введіть сторону b: ");
+    double ang3 = InputAngle("Введіть кут між сторонами (в радіанах): ");
+    double S3, P3;
+    TriangleALS(a3, b3, ang3, S3, P3);
+
+    cout << "\nРезультати (S — площа, P — периметр):" << endl;
+    cout << "Трикутник 1 -> S=" << S1 << "  P=" << P1 << endl;
+    cout << "Трикутник 2 -> S=" << S2 << "  P=" << P2 << endl;
+    cout << "Трикутник 3 -> S=" << S3 << "  P=" << P3 << endl;
+}
+
+// ------------------- Proc37 -----------------------------
+
+double InputRectCoord(string prompt) {
+    double val;
+    cout << prompt;
+    cin >> val;
+    if (val < -100 || val > 100) {
+        cout << "Помилка! Значення має бути в діапазоні [-100,100]. Спробуйте ще раз." << endl;
+        return InputRectCoord(prompt);
+    }
+    return val;
+}
+
+double RectP(double x1, double y1, double x2, double y2) 
+{
+    double width = fabs(x2 - x1);
+    double height = fabs(y2 - y1);
+    return 2 * (width + height);
+}
+
+void Task_Proc37() 
+{
+    double x1, y1, x2, y2;
+    double P1, P2, P3;
+
+    // Прямокутник 1
+    cout << "\nПрямокутник 1" << endl;
+    x1 = InputRectCoord("Введіть x1 (-100..100): ");
+    y1 = InputRectCoord("Введіть y1 (-100..100): ");
+    x2 = InputRectCoord("Введіть x2 (-100..100): ");
+    y2 = InputRectCoord("Введіть y2 (-100..100): ");
+    P1 = RectP(x1, y1, x2, y2);
+
+    // Прямокутник 2
+    cout << "\nПрямокутник 2" << endl;
+    x1 = InputRectCoord("Введіть x1 (-100..100): ");
+    y1 = InputRectCoord("Введіть y1 (-100..100): ");
+    x2 = InputRectCoord("Введіть x2 (-100..100): ");
+    y2 = InputRectCoord("Введіть y2 (-100..100): ");
+    P2 = RectP(x1, y1, x2, y2);
+
+    // Прямокутник 3
+    cout << "\nПрямокутник 3" << endl;
+    x1 = InputRectCoord("Введіть x1 (-100..100): ");
+    y1 = InputRectCoord("Введіть y1 (-100..100): ");
+    x2 = InputRectCoord("Введіть x2 (-100..100): ");
+    y2 = InputRectCoord("Введіть y2 (-100..100): ");
+    P3 = RectP(x1, y1, x2, y2);
+
+    cout << "\nРезультати (Периметр):" << endl;
+    cout << "Прямокутник 1 -> P=" << P1 << endl;
+    cout << "Прямокутник 2 -> P=" << P2 << endl;
+    cout << "Прямокутник 3 -> P=" << P3 << endl;
+}
+
+// ------------------- Integer35 ---------------------------
+
+bool InputHours(int &hours) {
+    cout << "Введіть кількість годин: ";
+    cin >> hours;
+    if (cin.fail() || hours < 0 || hours > 100000) {
+        cout << "Помилка! Некоректний ввід!" << endl;
+        return false;
+    }
+    return true;
+}
+
+void CalcDaysHours(int hours, int &days, int &rem) {
+    days = hours / 24;
+    rem = hours % 24;
+}
+
+void OutputResult(int days, int rem) {
+    cout << "Діб: " << days << ", Залишок годин: " << rem << endl;
+}
+
+void Task_Integer35() {
+    int hours;
+    if (!InputHours(hours)) return;
+    int days, rem;
+    CalcDaysHours(hours, days, rem);
+    OutputResult(days, rem);
+}
